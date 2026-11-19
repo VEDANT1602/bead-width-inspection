@@ -1,33 +1,14 @@
-# When should a bead-width monitor spend its next reference measurement?
+# Spending eight reference checks on a 160-segment print
 
-A printer camera reports a wider bead. A feed change and a shifted camera calibration can produce exactly the same readings. A second instrument can settle the question for one segment, but a build may allow only eight checks. This experiment asks when to spend them.
+When a camera starts reporting a wider bead, the printer might be feeding more material, or the camera calibration might have shifted. The monitor can buy a second opinion from a reference instrument eight times during the build. Which segments should it inspect?
 
-The timing of a check changes which defects the monitor sees. At eight checks per build, triggering on a large width deviation saved about 3.15 false alarms relative to periodic inspection and missed 2.41 more out-of-tolerance segments. Doubling the budget changed the ranking of the schedules.
+Look at the first paired step-change run. In one simulation 91 segments are outside tolerance. In the other, the camera sees the same trace and every segment is in tolerance. The reference readings are what let the monitor distinguish them. Each policy gets exactly one reading per block, even when its preferred trigger never fires. [Process-change record](results.csv?plain=1#L2882) · [Sensor-change record](results.csv?plain=1#L5762) · [Inspection budget in code](run.py#L63)
 
-[Read the manuscript (PDF)](manuscript.pdf) · [Browse the manuscript (Markdown)](manuscript.md) · [Inspect the paired runs (CSV)](results.csv)
+At the nominal camera noise of 0.012 mm, triggering on a large deviation averaged 0.96 false alarms per build, against 4.11 for periodic inspection. Missed violations went the other way, from 5.24 to 7.64. This trade-off matters if reprinting an undetected defect costs more than stopping on a false alarm.
 
-## What was compared
+![False alarms and misses for each policy and inspection budget](figure.png)
 
-The simulation generates 160 bead segments per build with a target-width tolerance of ±0.05 mm. It crosses three disturbance profiles (step, ramp and reversal) with four possible sources (stable, actual process change, sensor bias and cancellation). The camera sees identical traces in the process-only and sensor-only conditions when their underlying draws match. An independent noisy reference reveals the true width at the selected segments.
-
-Three monitors use the same width estimator. One inspects at a fixed time in each block. Another triggers when the estimated deviation reaches tolerance. The third checks when a drift allowance overlaps the tolerance boundary. Every monitor gets exactly one check per block, including a fallback on the last segment. Each combination uses 320 paired random runs with seed 90217.
-
-## Results at nominal camera noise
-
-Entries are mean segment counts per 160-segment build, averaged equally across all twelve disturbance scenarios. Camera noise has a standard deviation of 0.012 mm.
-
-| Checks per build | Timing rule | False alarms | Missed violations | Total errors |
-|---:|---|---:|---:|---:|
-| 8 | Periodic | 4.11 | 5.24 | 9.35 |
-| 8 | Magnitude | 0.96 | 7.64 | 8.60 |
-| 8 | Ambiguity | 4.22 | 5.23 | 9.45 |
-| 16 | Periodic | 2.10 | 3.68 | 5.78 |
-| 16 | Magnitude | 0.61 | 5.47 | 6.07 |
-| 16 | Ambiguity | 1.42 | 3.17 | 4.59 |
-
-![Mean false alarms and missed violations for the three inspection policies](figure.png)
-
-An alarm never changes the simulated extrusion rate. That choice lets all three policies see the same physical build. A production comparison would also need to measure reference-instrument delays, the cost of stopping a print and the response of the extruder to a correction.
+The simulator pairs the same builds across three timing rules. It varies the disturbance shape and source, and then repeats the comparison with sixteen checks. At that larger budget the ambiguity trigger gives the fewest total errors at nominal noise, 4.59 per build. Alarms have no effect on extrusion in this experiment. A production decision needs the delay of the reference check and the effect of adjusting feed mid-print. [Complete counts](results.csv) · [Methods](manuscript.md) · [Paper PDF](manuscript.pdf)
 
 ## Reproduce the comparison
 
