@@ -1,9 +1,10 @@
 cff-version: 1.2.0
-message: "Please use this citation when referring to the research software."
+message: "Please cite this software when reusing its methods."
 type: software
-title: "When should a bead-width monitor spend its next reference measurement?"
+title: "Scheduling independent width checks when extrusion drift and camera bias produce identical readings"
 authors:
   - family-names: Thaker
     given-names: Vedant
 repository-code: "https://github.com/VEDANT1602/bead-width-inspection"
-abstract: "Budgeted reference measurements for distinguishing printer drift from camera drift."
+date-released: 2026-11-21
+license: MIT

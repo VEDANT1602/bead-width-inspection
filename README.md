@@ -1,4 +1,18 @@
-# Spending eight reference checks on a 160-segment print
+# Scheduling independent width checks when extrusion drift and camera bias produce identical readings
+
+Vedant Thaker · November 21, 2026
+
+A camera that measures bead width plus sensor bias can give exactly the same reading for excess extrusion and for a calibration shift. We used this ambiguity to test five schedules for an independent width check.
+
+- [Revised manuscript (PDF)](manuscript.pdf) · [Editable manuscript](manuscript.md)
+- [Revision code, results and reproduction instructions](revision/supplement/) · [Preparation record](revision/PREPARATION.md)
+- [Baseline software and results at the study commit](https://github.com/VEDANT1602/bead-width-inspection/tree/3cb566931328d94fb0a33af65f63c73402ac453b) · [Software license](LICENSE) · [Third-party terms](LICENSING.md)
+
+## Earlier study and reproduction instructions
+
+The following instructions and results describe the original study. The revised paper and its supplemental tests are linked above.
+
+### Spending eight reference checks on a 160-segment print
 
 When a camera starts reporting a wider bead, the printer might be feeding more material, or the camera calibration might have shifted. The monitor can buy a second opinion from a reference instrument eight times during the build. Which segments should it inspect?
 
@@ -8,7 +22,7 @@ At the nominal camera noise of 0.012 mm, triggering on a large deviation average
 
 ![False alarms and misses for each policy and inspection budget](figure.png)
 
-The simulator pairs the same builds across three timing rules. It varies the disturbance shape and source, and then repeats the comparison with sixteen checks. At that larger budget the ambiguity trigger gives the fewest total errors at nominal noise, 4.59 per build. Alarms have no effect on extrusion in this experiment. A production decision needs the delay of the reference check and the effect of adjusting feed mid-print. [Complete counts](results.csv) · [Methods](manuscript.md) · [Paper PDF](manuscript.pdf)
+The simulator pairs the same builds across three timing rules. It varies the disturbance shape and source, and then repeats the comparison with sixteen checks. At that larger budget the ambiguity trigger gives the fewest total errors at nominal noise, 4.59 per build. Alarms have no effect on extrusion in this experiment. A production decision needs the delay of the reference check and the effect of adjusting feed mid-print. [Complete counts](results.csv) · [Methods](https://github.com/VEDANT1602/bead-width-inspection/blob/3cb566931328d94fb0a33af65f63c73402ac453b/manuscript.md) · [Paper PDF](https://github.com/VEDANT1602/bead-width-inspection/blob/3cb566931328d94fb0a33af65f63c73402ac453b/manuscript.pdf)
 
 ## Reproduce the comparison
 
