@@ -1,44 +1,12 @@
-# Scheduling independent width checks when extrusion drift and camera bias produce identical readings
+# When does a caliper check improve a camera estimate of extrusion width?
 
-Vedant Thaker · November 21, 2026
+Technical report by Vedant Thaker, Independent Researcher, Jeffersonville, Indiana. Correspondence: vedant.thaker1602@gmail.com.
 
-A camera that measures bead width plus sensor bias can give exactly the same reading for excess extrusion and for a calibration shift. We used this ambiguity to test five schedules for an independent width check.
+An extrusion camera can report the same width change after a physical disturbance or a shift in its own calibration. A caliper can distinguish the two, but applying its reading as an offset can also worsen later estimates. We tested that decision on five 200-mm paths from one published white-PLA print. We digitized the paired camera and caliper traces, fitted a discrepancy model on four speeds, and scored the fifth only at positions reserved for evaluation. Across 25 such positions, a fixed offset learned on the other paths gave a mean absolute discrepancy of 0.013 mm. Applying a first-position check and taking one more check at a width excursion gave 0.021 mm. Taking the second check halfway along the path gave 0.026 mm. A transient at the first reading made an early correction especially costly on two paths. These measurements support testing whether an offset persists before carrying it forward. They contain too few independent builds to establish an industrial inspection interval.
 
-- [Revised manuscript (PDF)](manuscript.pdf) · [Editable manuscript](manuscript.md)
-- [Revision code, results and reproduction instructions](revision/supplement/) · [Preparation record](revision/PREPARATION.md)
-- [Baseline software and results at the study commit](https://github.com/VEDANT1602/bead-width-inspection/tree/3cb566931328d94fb0a33af65f63c73402ac453b) · [Software license](LICENSE) · [Third-party terms](LICENSING.md)
-
-## Earlier study and reproduction instructions
-
-The following instructions and results describe the original study. The revised paper and its supplemental tests are linked above.
-
-### Spending eight reference checks on a 160-segment print
-
-When a camera starts reporting a wider bead, the printer might be feeding more material, or the camera calibration might have shifted. The monitor can buy a second opinion from a reference instrument eight times during the build. Which segments should it inspect?
-
-Look at the first paired step-change run. In one simulation 91 segments are outside tolerance. In the other, the camera sees the same trace and every segment is in tolerance. The reference readings are what let the monitor distinguish them. Each policy gets exactly one reading per block, even when its preferred trigger never fires. [Process-change record](results.csv?plain=1#L2882) · [Sensor-change record](results.csv?plain=1#L5762) · [Inspection budget in code](run.py#L63)
-
-At the nominal camera noise of 0.012 mm, triggering on a large deviation averaged 0.96 false alarms per build, against 4.11 for periodic inspection. Missed violations went the other way, from 5.24 to 7.64. This trade-off matters if reprinting an undetected defect costs more than stopping on a false alarm.
-
-![False alarms and misses for each policy and inspection budget](figure.png)
-
-The simulator pairs the same builds across three timing rules. It varies the disturbance shape and source, and then repeats the comparison with sixteen checks. At that larger budget the ambiguity trigger gives the fewest total errors at nominal noise, 4.59 per build. Alarms have no effect on extrusion in this experiment. A production decision needs the delay of the reference check and the effect of adjusting feed mid-print. [Complete counts](results.csv) · [Methods](https://github.com/VEDANT1602/bead-width-inspection/blob/3cb566931328d94fb0a33af65f63c73402ac453b/manuscript.md) · [Paper PDF](https://github.com/VEDANT1602/bead-width-inspection/blob/3cb566931328d94fb0a33af65f63c73402ac453b/manuscript.pdf)
-
-## Reproduce the comparison
-
-Run from the repository root with Python 3.11. The study used Python 3.11.9 and NumPy 1.26.0. The simulation generates its inputs locally.
-
-```bash
-python -m pip install -r requirements.txt
-python run.py
-python verify.py
-```
-
-`run.py` regenerates the 34,560 records in `results.csv` and prints policy means and paired uncertainty estimates. `verify.py` uses the Python standard library to recalculate the six table rows directly from that file. The figure can also be redrawn from the saved results.
-
-```bash
-python -m pip install -r requirements-plot.txt
-python make_figure.py
-```
-
-Repository maintained by **Vedant Thaker**.
+- [Read the paper](manuscript.pdf)
+- [Read the plain-text manuscript](manuscript.md)
+- [Reproduce the analysis and inspect the source and data records](study/README.md)
+- [Software license](LICENSE) and [third-party terms](LICENSING.md)
+- [Preparation record](study/PREPARATION.md)
+- [Previous manuscript and supplements](https://github.com/VEDANT1602/bead-width-inspection/tree/7d9d76dcde1ce0291224bcf7cf6a64756a2ef5d3)
