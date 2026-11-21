@@ -1,12 +1,9 @@
-# When does a caliper check improve a camera estimate of extrusion width?
+# Carrying a caliper offset along a printed bead: five paths on one specimen
 
-Technical report by Vedant Thaker, Independent Researcher, Jeffersonville, Indiana. Correspondence: vedant.thaker1602@gmail.com.
+Measurement report by Vedant Thaker, Independent Researcher, Jeffersonville, Indiana, USA.
 
-An extrusion camera can report the same width change after a physical disturbance or a shift in its own calibration. A caliper can distinguish the two, but applying its reading as an offset can also worsen later estimates. We tested that decision on five 200-mm paths from one published white-PLA print. We digitized the paired camera and caliper traces, fitted a discrepancy model on four speeds, and scored the fifth only at positions reserved for evaluation. Across 25 such positions, a fixed offset learned on the other paths gave a mean absolute discrepancy of 0.013 mm. Applying a first-position check and taking one more check at a width excursion gave 0.021 mm. Taking the second check halfway along the path gave 0.026 mm. A transient at the first reading made an early correction especially costly on two paths. These measurements support testing whether an offset persists before carrying it forward. They contain too few independent builds to establish an industrial inspection interval.
+A local caliper reading can correct an optical width estimate only to the extent that the discrepancy persists along the bead. Five 200-mm paths on one published white-PLA specimen provide a retrospective test of that assumption. At 25 withheld stations, the mean absolute camera–caliper discrepancy was 0.0133 mm without a correction, 0.0128 mm with a fixed offset trained on the other paths, and 0.0256 mm with checks at the start and midpoint. Re-reading the printed figure under 54 extraction conventions reversed the ranking of the first two methods in four cases. A single check at 0, 20, 60 or 100 mm gave discrepancies of 0.0395, 0.0167, 0.0231 and 0.0147 mm, respectively, at the same 15 late stations. The startup discrepancy transferred poorly on this print. Repeated builds with an independently varied camera bias would be needed to estimate drift or prescribe an inspection interval.
 
-- [Read the paper](manuscript.pdf)
-- [Read the plain-text manuscript](manuscript.md)
-- [Reproduce the analysis and inspect the source and data records](study/README.md)
-- [Software license](LICENSE) and [third-party terms](LICENSING.md)
-- [Preparation record](study/PREPARATION.md)
-- [Previous manuscript and supplements](https://github.com/VEDANT1602/bead-width-inspection/tree/7d9d76dcde1ce0291224bcf7cf6a64756a2ef5d3)
+[Paper (PDF)](manuscript.pdf) · [Editable text](manuscript.md) · [Methods and study files](study/README.md) · [Manuscript history](study/VERSION.md)
+
+[Author-owned software license](LICENSE) · [Third-party terms](LICENSING.md) · [Previous version](https://github.com/VEDANT1602/bead-width-inspection/tree/f89221d9f1ff624558b59f2b939042178865c877)
