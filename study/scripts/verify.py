@@ -40,3 +40,29 @@ assert len(x)==125
 for r in x:
     assert not any(all(r[field]==q[field] for field in ('held_out_speed','policy','position_mm')) for q in actions)
 print('Matrix and smoothing checks:',totals,'; scored held-out entries:',len(x))
+
+# The retrospective ranking uses identical downstream stations for all six policies.
+from collections import defaultdict
+from statistics import mean
+
+with (ROOT / 'outputs' / 'interior_reading_scores.csv').open() as stream:
+    late_rows = list(csv.DictReader(stream))
+keys = ('blue_color_cut', 'horizontal_shift_8x_px', 'ink_quantile', 'marker_center')
+policies = {'camera', 'fixed', 'check_0', 'check_20', 'check_60', 'check_100'}
+groups = defaultdict(lambda: defaultdict(dict))
+for row in late_rows:
+    key = tuple(row[column] for column in keys)
+    paths = groups[key][row['policy']]
+    speed = int(row['held_out_speed'])
+    assert speed not in paths
+    paths[speed] = [float(row[f'abs_error_{pos}_mm']) for pos in (120, 160, 200)]
+assert len(groups) == 54
+for group in groups.values():
+    assert set(group) == policies
+    assert all(set(paths) == {10, 20, 30, 40, 50} for paths in group.values())
+    errors = {policy: mean(mean(stations) for stations in paths.values())
+              for policy, paths in group.items()}
+    assert errors['check_100'] < errors['check_0']
+    assert max(errors['camera'], errors['fixed']) < min(
+        errors[p] for p in policies if p.startswith('check_'))
+print('Common downstream stations: 54 extraction settings × 6 policies × 5 paths × 3 positions.')

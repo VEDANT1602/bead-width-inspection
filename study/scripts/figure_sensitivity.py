@@ -97,17 +97,25 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('pdf',type=Path);p.add_argument('--out',type=Path,default=ROOT/'outputs');a=p.parse_args()
     rgb=read_ink(a.pdf);a.out.mkdir(exist_ok=True,parents=True)
     rows=[];widths=[]
+    late_rows = []
     for color in (.30,.323,.35):
         cache=traces(rgb,color)
         for dx,q,marker in product((-2,0,2),(.25,.5,.75),('edge_mid','ink_mean')):
             z,r=extract(cache,dx,q,marker)
             scores,late=evaluate(z,r)
             rows.append((color,dx,q,marker,*scores.values()))
+            for policy, paths in late.items():
+                for speed, first, second, third in paths:
+                    late_rows.append((color, dx, q, marker, policy, speed, first, second, third))
             for i,speed in enumerate(SPEEDS):
                 for j in range(11):widths.append((color,dx,q,marker,speed,20*j,z[i,j],r[i,j]))
             if (color,dx,q,marker)==(.323,0,.5,"edge_mid"):
                 central=z.copy()
                 dump(a.out/'interior_checks.csv',['policy','held_out_speed','abs_error_120_mm','abs_error_160_mm','abs_error_200_mm'],[(k,*row) for k,per in late.items() for row in per])
+    dump(a.out/'interior_reading_scores.csv',
+         ['blue_color_cut','horizontal_shift_8x_px','ink_quantile','marker_center',
+          'policy','held_out_speed','abs_error_120_mm','abs_error_160_mm','abs_error_200_mm'],
+         late_rows)
     dump(a.out/'figure_reading_scores.csv',['blue_color_cut','horizontal_shift_8x_px','ink_quantile','marker_center',*scores],rows)
     dump(a.out/'figure_reading_widths.csv',['blue_color_cut','horizontal_shift_8x_px','ink_quantile','marker_center','speed_mm_s','position_mm','camera_mm','caliper_mm'],widths)
     original=np.genfromtxt(ROOT/'outputs'/'plotted_widths.csv',delimiter=',',names=True)

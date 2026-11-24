@@ -4,47 +4,46 @@ Vedant Thaker
 Independent Researcher, Jeffersonville, Indiana, USA  
 vedant.thaker1602@gmail.com
 
-Measurement report
-
-**Research period (author-reported)** · August 2–13, 2026 &nbsp; | &nbsp; **Manuscript revised** · November 21, 2026
+Measurement report · November 24, 2026
 
 ### Abstract
 
-A local caliper reading can correct an optical width estimate only to the extent that the discrepancy persists along the bead. Five 200-mm paths on one published white-PLA specimen provide a retrospective test of that assumption. At 25 withheld stations, the mean absolute camera–caliper discrepancy was 0.0133 mm without a correction, 0.0128 mm with a fixed offset trained on the other paths, and 0.0256 mm with checks at the start and midpoint. Re-reading the printed figure under 54 extraction conventions reversed the ranking of the first two methods in four cases. A single check at 0, 20, 60 or 100 mm gave discrepancies of 0.0395, 0.0167, 0.0231 and 0.0147 mm, respectively, at the same 15 late stations. The startup discrepancy transferred poorly on this print. Repeated builds with an independently varied camera bias would be needed to estimate drift or prescribe an inspection interval.
+A caliper check at the start of a printed bead helps downstream only if the local camera–caliper discrepancy persists. This report compares four possible check positions on five paths digitized from a published figure of one white-PLA specimen. Each rule received one caliper reading. All were scored against the same 15 downstream stations. Moving the check from 0 to 100 mm reduced mean absolute discrepancy from 0.0395 to 0.0147 mm. Leaving the camera uncorrected gave 0.0111 mm, and a fixed offset learned from the other four paths gave 0.0096 mm. Both comparisons survived 54 ways of reading the figure. A start or midpoint correction therefore carried more local error forward than it removed on this specimen.
 
-## The ambiguity in a width trace
+## Width and camera bias give the same optical signal
 
-A width monitor gives the operator a choice when its reading departs from target. Adjusting flow responds to a physical width change. Recalibrating the camera responds to optical drift. For camera reading z = w + b + e, where w is physical width, b is optical bias and e is measurement noise, replacing (w, b) by (w + h, b − h) leaves every camera reading unchanged. Even a noiseless camera cannot identify an arbitrary pair of trajectories. An independent measurement r = w + u at one position anchors width there. Its value further along the path depends on how long the discrepancy persists.
+An apparent increase in extrusion width can have two causes that call for different actions. Adjusting flow changes the bead itself. Correcting camera bias changes the reading. In the observation equation z = w + b + e, replacing physical width w and bias b by w + h and b − h leaves the reading z unchanged for any trajectory h. A caliper anchors width at one location. Whether its correction transfers to a later location is an empirical question.
 
-This note tests that persistence using physical paths with two instruments. Its primary outcome is the absolute discrepancy between a corrected camera estimate and a caliper value that the correction rule has never seen. A separate fault simulation asks how assumptions about the source of a disturbance change a decision based on tolerance crossings.
+## Published specimen and calibration rule
 
-## Five paths with paired instrument readings
+Badarinath and Prabhu printed a 20-layer white-PLA wall with five 200-mm regions at speeds of 10, 20, 30, 40 and 50 mm/s [1]. They smoothed the last-layer optical measurements over 20 frames and took caliper measurements near stations 20 mm apart. The investigators report five local repeats and 50 readings per path. Figure 10 shows 11 caliper marks per path including both ends. The analysis pairs these 55 marks with the optical curve at the same plotted positions. The relationship between the endpoint marks and individual caliper readings is unavailable.
 
-Badarinath and Prabhu printed a 20-layer white-PLA wall with five 200-mm regions at 10, 20, 30, 40 and 50 mm/s [1]. Their last-layer camera observations were smoothed over 20 frames. They took local caliper measurements at 20-mm intervals and reported five measurements per neighborhood and 50 individual readings per path. Figure 10 shows a camera curve and a red caliper series with 11 plotted stations, including both endpoints. We used the 55 visible pairs as summaries. Their relationship to the individual readings at the endpoints cannot be recovered from the plot.
+Each fold holds out one complete path. On the other four paths, the ordered discrepancy d = z − r between optical reading z and caliper reading r supplies a starting mean m and variance P from the first stations. The offset follows a random walk with increment variance Q per 20-mm step and observation variance R. A Gaussian innovation likelihood estimates Q and R from the training paths. The fitted standard deviations were 0.010–0.020 mm for drift per step and 0.007–0.015 mm for observation noise. These estimates also absorb registration and digitization errors.
 
-The extraction maps the top position axis and marked width ticks to physical units. It reads the center of each red marker and the darker of the two blue traces, interpolating where one ink covers the other. Plotted width values depend on line thickness, registration and the source smoothing. We report precision at the scale of the plot. The 0.0371-mm value in [1] is the maximum reported RMSE across color/material tests in Section 4.3 and Appendix A.2. It supplies a separate stress-test scale. A camera-only error standard deviation cannot be identified from that statistic.
+For a check j steps into the held-out path, the predicted variance is V = P + jQ. The rule observes the local discrepancy once and uses the offset m + V(d − m)/(V + R) for all later estimates [4]. Its four possible acquisition sites are 0, 20, 60 and 100 mm. The camera baseline uses no offset. The fixed-offset baseline subtracts the median of all paired discrepancies on the four training paths. Neither baseline acquires a check on the held-out path. Each estimate is compared with the caliper marks at 120, 160 and 200 mm. The mean absolute discrepancy gives equal weight to all five paths.
 
-In the extracted PDF the plot is rasterized. The width covered by one row of the 8× rendering is 0.00018 mm in the large panel and about 0.00084–0.00086 mm in the four small panels. Rendering resolution sets the coordinate increment. Ink thickness, overlapping traces and horizontal registration can contribute larger errors. We therefore repeated the extraction with three color cutoffs, three horizontal registrations (−0.25, 0, +0.25 PDF point), three locations across the blue ink thickness, and two center rules for the red caliper marks. Each of the 54 combinations refits the four training paths in each fold. They are deterministic reading choices applied to the same figure. Their range measures sensitivity to those choices and supplies no sampling interval for the original instruments.
+## The start discrepancy did not carry to the end of the bead
 
-## Held-out calibration and a decision available during printing
+At 20 mm/s the start camera reading exceeded the plotted caliper value by about 0.082 mm. At 50 mm/s it fell short by about 0.068 mm. In both cases the instruments agreed more closely farther along the path. On the 15 common test stations, even the best single check by average discrepancy added 0.0036 mm compared with leaving the camera uncorrected. Results varied by path. The 100-mm check beat the uncorrected camera on three of five paths and the fixed offset on two.
 
-Each fold holds out one entire path. On the other four, the model treats the paired discrepancy d = z − r as a drifting offset b with additive noise. Between neighboring stations, b has zero-mean independent increments of variance Q. Observation variance is R. The first-station mean and variance come from the four training starts. Gaussian innovation likelihood across the four ordered paths estimates Q and R. The fitted drift standard deviation ranged from 0.010 to 0.020 mm per 20-mm step, and fitted observation standard deviation from 0.007 to 0.015 mm. These effective parameters include local instrument, registration and plotting effects. They cannot separate mechanical reference noise from camera noise.
+| Held-out path correction | Mean absolute discrepancy (mm) | Range over figure extractions (mm) |
+| --- | --- | --- |
+| Camera alone | 0.0111 | 0.0108–0.0124 |
+| Offset from four training paths | 0.0096 | 0.0094–0.0117 |
+| One check at 0 mm | 0.0395 | 0.0355–0.0404 |
+| One check at 20 mm | 0.0167 | 0.0155–0.0200 |
+| One check at 60 mm | 0.0231 | 0.0216–0.0236 |
+| One check at 100 mm | 0.0147 | 0.0142–0.0231 |
 
-At an acquired station the offset estimate m becomes m + P(d − m)/(P + R) and its variance becomes PR/(P + R), where P is the predicted variance [4]. Each subsequent 20-mm step adds Q to P. Both two-check policies acquire the 0-mm caliper value. The fixed schedule checks again at 100 mm. The magnitude schedule can check at 20, 60, 100 or 140 mm. It uses the first estimated width at least 0.05 mm from a rounded nominal width of 1.5 mm at 10 mm/s or 1.0 mm otherwise, and checks at 140 mm if no threshold crossing occurs. The threshold is an assigned action threshold. No reference candidate coincides with a score position.
+Table 1. Errors against the same 15 downstream caliper marks. The middle column uses the central extraction convention. The ranges summarize 54 readings of one figure.
 
-All methods are evaluated at 40, 80, 120, 160 and 200 mm. Comparators are the smoothed camera as plotted, a constant offset equal to the training paths’ median paired discrepancy, and a first-position-only correction. Each plotted path has five scored stations. We report all five path outcomes and their equal-weight mean. The design supplies one specimen and no replication across printers.
+The extraction aligns the marked axes, locates each red caliper marker and interpolates the darker camera trace across occlusions. Three optical color cutoffs, three horizontal alignments (−0.25, 0 and +0.25 PDF point), three positions across the blue ink and two caliper-marker center rules give 54 settings. Under each setting, the model for each held-out path is refitted on the other four paths. For each setting separately, every single-check rule had a higher mean downstream discrepancy than either baseline. Moving the check from 0 to 100 mm lowered discrepancy by 0.0154–0.0249 mm across these settings. These ranges describe sensitivity to reading the plot. Repeated digitizations do not add specimens.
 
-## What happened after a correction
+## Why the comparison depends on the scored stations
 
-On the 20-mm/s path the initial camera read approximately 1.142 mm against a 1.060-mm caliper point. At 50 mm/s the discrepancy went the other way, about 0.935 versus 1.003 mm. On both paths the first correction carried a large discrepancy into positions where the two instruments subsequently agreed more closely. Timing a second check by magnitude beat the halfway check on the 20-mm/s path, lost on three paths and tied on one. At 10 mm/s the halfway check had the lowest discrepancy of all five methods.
+A second analysis includes earlier positions and allows a second check. Each path is scored at 40, 80, 120, 160 and 200 mm. A fixed schedule checks at 0 and 100 mm. A magnitude schedule checks at 0 mm and again at the first eligible position (20, 60, 100 or 140 mm) at which the estimated width differs by at least 0.05 mm from 1.5 mm for the slowest path or 1.0 mm for the others. It uses 140 mm if there is no crossing. The threshold and nominal widths are assigned for this comparison.
 
-Unrounded, the five halfway path means give 0.02559925 mm against the 25 hidden values. Each path contributed exactly five scores. Averaging the five path means after rounding each to three decimal places gives 0.0254 mm. Table 1 retains four decimals and the accompanying CSV records the score at every location.
-
-Across the 54 readings, median station-wise spread in reconstructed camera width was 0.00222 mm. The maximum was 0.03288 mm at 30 mm/s and 120 mm. The corresponding median and maximum caliper-marker spreads were 0.00034 and 0.00225 mm. The camera-only mean absolute discrepancy ranged from 0.01297 to 0.01410 mm; the fixed offset ranged from 0.01280 to 0.01440 mm. The fixed offset had the smaller value in 50 extractions and the camera alone in four. Both were below the magnitude policy (0.01703–0.02219 mm) and halfway policy (0.02507–0.02855 mm) in every extraction. This exercise cannot recover the precision or synchronization of the original measurements.
-
-
-
-| Speed (mm/s) | Camera | Fixed offset | Start only | Magnitude | Halfway |
+| Speed (mm/s) | Camera | Fixed offset | Start only | Magnitude | Start and midpoint |
 | --- | --- | --- | --- | --- | --- |
 | 10 | 0.0167 | 0.0177 | 0.0179 | 0.0187 | 0.0088 |
 | 20 | 0.0097 | 0.0088 | 0.0680 | 0.0090 | 0.0493 |
@@ -52,29 +51,22 @@ Across the 54 readings, median station-wise spread in reconstructed camera width
 | 40 | 0.0153 | 0.0144 | 0.0349 | 0.0203 | 0.0203 |
 | 50 | 0.0120 | 0.0095 | 0.0698 | 0.0452 | 0.0373 |
 | Mean | 0.0133 | 0.0128 | 0.0407 | 0.0213 | 0.0256 |
-Mean absolute discrepancy (mm) against five withheld caliper stations per speed. All five regions belong to one specimen.
 
-## Does a mid-path check transfer better?
+Table 2. Mean absolute discrepancy in mm for five unseen stations per path. All five regions belong to one specimen.
 
-A second comparison holds both the number of checks and the evaluation locations fixed. For each held-out path the filter receives exactly one reading at 0, 20, 60 or 100 mm. Before that reading, it propagates the training-predicted prior mean and variance without seeing any held-out caliper value. The same three later stations at 120, 160 and 200 mm are scored in all cases (15 values overall). A start-only check gave 0.03949 mm mean absolute discrepancy. The values for 20, 60 and 100 mm were 0.01673, 0.02306 and 0.01466 mm. On the same 15 points the camera alone gave 0.01106 mm and the training offset 0.00962 mm. Moving the read away from the start reduced carry-forward error on average. Differences in the time from measurement to assessment, local width and path-specific disturbances remain entangled. These paths cannot identify a bead-start mechanism independently of registration or an instrument offset.
+On these 25 stations, the two baselines trade places in four of the 54 extractions. Their nominal 0.0005-mm separation does not support choosing one over the other. A fixed offset and the uncorrected camera each outperformed both two-check policies under every extraction. The source study reports a maximum RMSE of 0.0371 mm across separate color and material tests [1, §4.3]. That figure cannot identify the measurement uncertainty of the 25 plotted station pairs.
 
-## What the paired observations leave unidentified
-
-The physical specimen has no imposed optical faults or separately labeled process faults. To isolate those cases we also compared matched camera traces in a synthetic tolerance-alarm task. In each of 12 shape/source cells, 320 trajectories have 160 segments and eight independent reference opportunities, one per 20 segments. Process and sensor shifts can have identical camera readings. A true width departure of more than 0.05 mm defines a violation. False alarms and missed violations receive equal weight. The supplement compares periodic, magnitude, ambiguity, EWMA and two-sided CUSUM timing [2,3], each with a single-reading reset or a two-state filter [4].
-
-With the nominal filter and equal-weight fault cells, magnitude timing averaged 6.800 false-plus-missed segments per build. Changing the presumed share of physical faults among visible shifts from 5% to 95%, while keeping stable and cancellation sources at 25% each, moved the lowest-count nominal-filter schedule from magnitude to EWMA. With a bias-heavy filter the corresponding lowest-count schedules were periodic and CUSUM. For an arithmetic check, nominal periodic reset gave (15,790 false + 20,115 missed)/3,840 = 9.35026. Periodic filtering at assigned camera SD 0.0371 mm gave (9,821 + 26,092)/3,840 = 9.35234. They round to the same number for different reasons.
-
-For a line operator the unresolved issue is whether an observed discrepancy will recur at the next location. An independently varied camera offset, a measured drift time scale, and repeat builds would test that assumption. On this print the start correction carried too much local discrepancy forward. Near-equal errors for a fixed offset and the camera alone neither establish zero drift nor identify a drift time scale. The evidence covers width estimation on a single specimen. Production fault rates, alarm costs and reference latency require separate observation.
+Speed, location and specimen history vary together in these five regions. The plot cannot distinguish a startup transient from a local measurement or alignment error. To estimate an inspection interval, an experiment would need repeated prints with aligned raw instrument readings and independently varied camera offsets.
 
 ## Data and code availability
 
-The accompanying supplement contains the attributed digitization, fold-specific model fits, scored stations, synthetic count audit, scripts and reference register. Badarinath and Prabhu’s measurements are available in Figure 10 of [1], under CC BY 4.0. The 54 re-extractions, individual station estimates and one-check interior comparisons are included. The source reports 50 mechanical readings per path; these are local repeats and cannot be treated as 50 independent positions. The original readings, repeat identifiers, raw camera frame widths and station alignment would permit a direct measurement-error analysis. The source states that data are available from its corresponding author. Code and source identification for the synthetic comparison are pinned at https://github.com/VEDANT1602/bead-width-inspection/tree/7d9d76dcde1ce0291224bcf7cf6a64756a2ef5d3 .
+The study files include the 55 digitized pairs, fitting and extraction scripts, and downstream errors under all 54 conventions. The source figure is Figure 10 of Badarinath and Prabhu [1], licensed CC BY 4.0. The article offers raw measurements on request. The source authors were asked for the caliper repeats, station coordinates and matching optical series on November 21, 2026. Only plotted summaries entered the present analysis.
 
-[Study files, software and source records](https://github.com/VEDANT1602/bead-width-inspection/tree/main/study)
+The supplement retains a separate simulation comparing EWMA, CUSUM and filter-based alarm timing [2–4]. Its fault mix, noise and costs are assigned. No simulated observation enters Tables 1 or 2. The numerical tables and run instructions are in the accompanying study directory and the [public study repository](https://github.com/VEDANT1602/bead-width-inspection/tree/main/study).
 
 ## Author and disclosures
 
-Vedant Thaker is the sole author and set the research question. OpenAI Codex assisted with digitizing the published camera and caliper observations, implementing and executing the estimators, re-reading the figure under alternative extraction conventions, checking the rounded error totals and drafting the analysis.
+Vedant Thaker is the sole author. He posed the reference-timing question and identified a bead-start transient as a possible explanation to test against checks farther along the path. OpenAI Codex assisted with digitizing the published camera and caliper observations, implementing and executing the estimators, re-reading the figure under alternative extraction conventions, checking the rounded error totals and drafting the analysis.
 
 This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors. The author declares no competing interests.
 
